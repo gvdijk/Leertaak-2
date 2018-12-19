@@ -1,5 +1,7 @@
 package weatherServer;
 
+import weatherSQL.WeatherSQLConnection;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,6 +12,9 @@ public class WeatherServer {
 
     public static void main(String[] args) {
         Socket con;
+        boolean yes = true;
+        System.out.println();
+        WeatherSQLConnection wsqlcon = new WeatherSQLConnection();
         try {
             ServerSocket server = new ServerSocket(PORT);
             while (true) {

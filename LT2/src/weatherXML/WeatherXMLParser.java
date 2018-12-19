@@ -47,60 +47,75 @@ public class WeatherXMLParser extends DefaultHandler {
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
+        byte flag = -1;
         try {
-            System.out.println(current);
             switch(qName.toUpperCase()) {
                 case "MEASUREMENT":
+                    flag = 0;
                     list.add(temp);
                     break;
                 case "STN":
+                    flag = 1;
                     temp.setStation(Integer.parseInt(current));
                     break;
                 case "DATE":
+                    flag = 2;
                     temp.setDate(current);
                     break;
                 case "TIME":
+                    flag = 3;
                     temp.setTime(current);
                     break;
                 case "TEMP":
+                    flag = 4;
                     temp.setTemperature(Float.parseFloat(current));
                     break;
                 case "DEWP":
+                    flag = 5;
                     temp.setDew(Float.parseFloat(current));
                     break;
                 case "STP":
+                    flag = 6;
                     temp.setAirStation(Float.parseFloat(current));
                     break;
                 case "SLP":
+                    flag = 7;
                     temp.setAirSea(Float.parseFloat(current));
                     break;
                 case "VISIB":
+                    flag = 8;
                     temp.setVisibility(Float.parseFloat(current));
                     break;
                 case "WDSP":
+                    flag = 9;
                     temp.setWindSpeed(Float.parseFloat(current));
                     break;
                 case "PRCP":
+                    flag = 10;
                     temp.setRain(Float.parseFloat(current));
                     break;
                 case "SNDP":
+                    flag = 11;
                     temp.setSnow(Float.parseFloat(current));
                     break;
                 case "CLDC":
+                    flag = 12;
                     temp.setClouds(Float.parseFloat(current));
                     break;
                 case "WNDDIR":
+                    flag = 13;
                     temp.setWindDegree(Integer.parseInt(current));
                     break;
                 case "FRSHTT":
-                    //temp.setEvents(Byte.parseByte(current));
+                    flag = 14;
+                    temp.setEvents(Byte.parseByte(current, 2));
                     break;
                 default:
                     break;
             }
         }
         catch (NumberFormatException nfe) {
-            errHandler.handleEMptyString(nfe);
+            temp = errHandler.handleEmptyString(nfe, flag, temp);
         }
     }
 

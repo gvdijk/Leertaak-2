@@ -15,16 +15,12 @@ public class WeatherXMLHandler extends DefaultHandler {
     }
 
 
-    public void startDocument() throws SAXException {
-        System.out.println("Here");
-    }
+    public void startDocument() throws SAXException {}
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equalsIgnoreCase("MEASUREMENT")) {
             temp = new WeatherMeasurement();
-            System.out.println("yes");
         }
-        System.out.println("no");
     }
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -77,14 +73,6 @@ public class WeatherXMLHandler extends DefaultHandler {
 
     public void characters(char ch[], int start, int length) throws SAXException {
         current = new String(ch, start, length);
-        System.out.println("oui");
-    }
-
-
-    public void printData() {
-        for (WeatherMeasurement wm : list) {
-            System.out.println(wm.toString());
-        }
     }
 
 }

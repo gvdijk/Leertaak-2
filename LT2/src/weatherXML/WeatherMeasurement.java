@@ -17,8 +17,7 @@ public class WeatherMeasurement {
     private float clouds;
     private int windDegree;
 
-    public WeatherMeasurement() {
-    }
+    public WeatherMeasurement() {}
 
     public int getStation() {
         return station;
@@ -108,13 +107,31 @@ public class WeatherMeasurement {
         this.snow = snow;
     }
 
-    public byte getEvents() {
-        return events;
-    }
+    public void setEvents(byte events) { this.events = events; }
 
-    public void setEvents(byte events) {
-        this.events = events;
-    }
+    public int isRained() { return (events & 32) == 32 ? 1 : 0; }
+
+    //public void setRained(boolean rained) { this.rained = rained; this.events.}
+
+    public int isSnowed() { return (events & 16) == 16 ? 1 : 0; }
+
+    //public void setSnowed(boolean snowed) { this.snowed = snowed; }
+
+    public int isFrozen() { return (events & 8) == 8 ? 1 : 0; }
+
+    //public void setFrozen(boolean frozen) { this.frozen = frozen; }
+
+    public int isHailed() { return (events & 4) == 4 ? 1 : 0; }
+
+    //public void setHailed(boolean hailed) { this.hailed = hailed; }
+
+    public int isThunder() { return (events & 2) == 2 ? 1 : 0; }
+
+    //public void setThunder(boolean thunder) { this.thunder = thunder; }
+
+    public int isTornado() { return (events & 1) == 1 ? 1 : 0; }
+
+    //public void setTornado(boolean tornado) { this.tornado = tornado; }
 
     public float getClouds() {
         return clouds;
