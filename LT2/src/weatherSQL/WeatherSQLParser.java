@@ -56,7 +56,7 @@ public class WeatherSQLParser {
         }
     }
 
-    public String sendQuery() {
+    public String getQuery() {
         query.replace(query.length() - 1, query.length(), ";");
         return query.toString();
     }

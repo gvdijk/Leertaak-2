@@ -31,9 +31,10 @@ public class WorkerThread implements Runnable {
                     for (int x=0; x<30; x++) {
                         sqlParser.parseChuck(data.remove(0));
                     }
-                    FileOutputStream fo = new FileOutputStream("E:\\output.sql");
-                    byte[] temp = sqlParser.sendQuery().getBytes();
-                    fo.write(temp);
+                    //FileOutputStream fo = new FileOutputStream("E:\\output.sql");
+                    //byte[] temp = sqlParser.getQuery().getBytes();
+                    //fo.write(temp);
+                    WeatherServer.wsqlcon.addQuery(sqlParser.getQuery());
                 }
             }
 

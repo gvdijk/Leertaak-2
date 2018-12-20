@@ -6,15 +6,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class WeatherServer {
-    public static final int PORT = 54871;
+    private static final int PORT = 54871;
     private static final int maxConnections = 800;
     public static Semaphore sem = new Semaphore(maxConnections);
+    public static WeatherSQLConnection wsqlcon = new WeatherSQLConnection();
 
     public static void main(String[] args) {
+        Thread sqlWorker = new Thread(wsqlcon);
+        sqlWorker.start();
         Socket con;
-        boolean yes = true;
-        System.out.println();
-        WeatherSQLConnection wsqlcon = new WeatherSQLConnection();
         try {
             ServerSocket server = new ServerSocket(PORT);
             while (true) {

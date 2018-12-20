@@ -5,7 +5,7 @@ public class WeatherXMLErrorHandler {
     public WeatherXMLErrorHandler() {}
 
     public WeatherMeasurement handleEmptyString(Exception e, byte flag, WeatherMeasurement m) {
-        System.out.println("Big oof: " + flag);
+        // System.out.println("Big oof: " + flag);
         switch (flag) {
             case -1:
                 // Might as well surrender

@@ -1,21 +1,44 @@
 package weatherSQL;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
-public class WeatherSQLConnection {
+public class WeatherSQLConnection implements Runnable {
+    private static final String url = "jdbc:mysql://localhost:3306/unwdmi?useSSL=false";
+    private static final String user = "";
+    private static final String pass = "";
+
     private Connection con;
+    private ArrayList<String> queries = new ArrayList<>();
 
-    public WeatherSQLConnection() {
-        String url = "jdbc:mysql://localhost:3306/unwdmi?useSSL=false";
-        String username = "";
-        String password = "";
+    public WeatherSQLConnection() {}
 
+    public synchronized void run() {
         try {
-            con = DriverManager.getConnection(url, username, password);
-            System.out.println("Database connected!");
+            while (true) {
+                if (queries.size() > 0) {
+                    con = DriverManager.getConnection(url, user, pass);
+                    Statement s = con.createStatement();
+                    while (queries.size() > 0) {
+                        s.executeUpdate(queries.remove(0));
+                        System.out.println(queries.size());
+                    }
+                    //PreparedStatement ps = con.prepareStatement("INSERT INTO `Measurement` (`Station_stn`, `date`, `time`, `temp`, `dew`, `stp`, `slp`, `vis`, `wdsp`, `prcp`, `sndp`, `cldc`, `wnddir`, `frz`, `rain`, `snow`, `hail`, `tndr`, `torn`) VALUES (?)");
+                    //while (queries.size() > 0) {
+                    //    ps.setString(1, queries.remove(0));
+                    //    ps.executeUpdate();
+                    //    System.out.println(queries.size());
+                    //}
+                    con.close();
+                }
+                wait();
+            }
         }
-        catch (SQLException sqle) { System.out.println(sqle); }
+        catch (Exception e) { System.out.println(e); }
+    }
+
+    public synchronized void addQuery(String q) {
+        queries.add(q);
+        notify();
     }
 }
