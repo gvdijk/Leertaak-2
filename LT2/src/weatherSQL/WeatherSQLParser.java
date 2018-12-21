@@ -9,7 +9,7 @@ public class WeatherSQLParser {
     private StringBuilder query;
 
     public WeatherSQLParser() {
-        query  = new StringBuilder("INSERT INTO `Measurement` (`Station_stn`, `date`, `time`, `temp`, `dew`, `stp`, `slp`, `vis`, `wdsp`, `prcp`, `sndp`, `cldc`, `wnddir`, `frz`, `rain`, `snow`, `hail`, `tndr`, `torn`) VALUES ");
+        query  = new StringBuilder("INSERT IGNORE INTO `Measurement` (`Station_stn`, `date`, `time`, `temp`, `dew`, `stp`, `slp`, `vis`, `wdsp`, `prcp`, `sndp`, `cldc`, `wnddir`, `frz`, `rain`, `snow`, `hail`, `tndr`, `torn`) VALUES ");
     }
 
     public void parseChuck(ArrayList<WeatherMeasurement> data) {

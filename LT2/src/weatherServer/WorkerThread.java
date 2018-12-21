@@ -26,15 +26,13 @@ public class WorkerThread implements Runnable {
             while ((streamIn.read(bytes)) > 0) {
                 WeatherXMLParser parser = new WeatherXMLParser(new ByteArrayInputStream(bytes));
                 data.add(parser.getData());
-                if (data.size() >= 60) {
+                if (data.size() >= 15) {
                     WeatherSQLParser sqlParser = new WeatherSQLParser();
-                    for (int x=0; x<30; x++) {
-                        sqlParser.parseChuck(data.remove(0));
+                    for (int x=0; x<10; x++) {
+                        //sqlParser.parseChuck(data.remove(0));
+                        WeatherServer.wsqlcon.addData(data.remove(0));
                     }
-                    //FileOutputStream fo = new FileOutputStream("E:\\output.sql");
-                    //byte[] temp = sqlParser.getQuery().getBytes();
-                    //fo.write(temp);
-                    WeatherServer.wsqlcon.addQuery(sqlParser.getQuery());
+                    //WeatherServer.wsqlcon.addQuery(sqlParser.getQuery());
                 }
             }
 
