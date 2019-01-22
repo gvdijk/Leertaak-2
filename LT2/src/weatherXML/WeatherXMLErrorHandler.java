@@ -4,8 +4,8 @@ public class WeatherXMLErrorHandler {
 
     public WeatherXMLErrorHandler() {}
 
-    public WeatherMeasurement handleEmptyString(Exception e, byte flag, WeatherMeasurement m) {
-        // System.out.println("Big oof: " + flag);
+    public WeatherMeasurement handleEmptyString(Exception e, byte flag, WeatherMeasurement wm, WeatherCorrection wc) {
+        System.out.println("Flag: " + flag);
         switch (flag) {
             case -1:
                 // Might as well surrender
@@ -23,43 +23,43 @@ public class WeatherXMLErrorHandler {
                 // Might as well surrender
                 break;
             case 4:
-                m.setTemperature(0.0f);
+                wm.setTemperature(wc.getTemperature());
                 break;
             case 5:
-                m.setDew(0.0f);
+                wm.setDew(wc.getDew());
                 break;
             case 6:
-                m.setAirStation(0.0f);
+                wm.setAirStation(wc.getStation());
                 break;
             case 7:
-                m.setAirSea(0.0f);
+                wm.setAirSea(wc.getAirSea());
                 break;
             case 8:
-                m.setVisibility(0.0f);
+                wm.setVisibility(wc.getVisibility());
                 break;
             case 9:
-                m.setWindSpeed(0.0f);
+                wm.setWindSpeed(wc.getWindSpeed());
                 break;
             case 10:
-                m.setRain(0.0f);
+                wm.setRain(wc.getRain());
                 break;
             case 11:
-                m.setSnow(0.0f);
+                wm.setSnow(wc.getSnow());
                 break;
             case 12:
-                m.setClouds(0);
+                wm.setClouds(wc.getClouds());
                 break;
             case 13:
-                m.setWindDegree(0);
+                wm.setWindDegree(Math.round(wc.getWindDegree()));
                 break;
             case 14:
                 byte b = 0;
-                m.setEvents(b);
+                wm.setEvents(b);
                 break;
             default:
                 // Might as well surrender
                 break;
         }
-        return m;
+        return wm;
     }
 }

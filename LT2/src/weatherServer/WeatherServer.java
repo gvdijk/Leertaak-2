@@ -1,6 +1,6 @@
 package weatherServer;
 
-import weatherSQL.WeatherSQLConnection;
+import weatherIO.WeatherIO;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,11 +9,11 @@ public class WeatherServer {
     private static final int PORT = 54871;
     private static final int maxConnections = 800;
     public static Semaphore sem = new Semaphore(maxConnections);
-    public static WeatherSQLConnection wsqlcon = new WeatherSQLConnection();
+    public static WeatherIO wio = new WeatherIO();
 
     public static void main(String[] args) {
-        Thread sqlWorker = new Thread(wsqlcon);
-        sqlWorker.start();
+        Thread ioWorker = new Thread(wio);
+        ioWorker.start();
         Socket con;
         try {
             ServerSocket server = new ServerSocket(PORT);

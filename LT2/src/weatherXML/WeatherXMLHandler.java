@@ -11,11 +11,7 @@ public class WeatherXMLHandler extends DefaultHandler {
     private String current;
     private ArrayList<WeatherMeasurement> list = new ArrayList<>();
 
-    public WeatherXMLHandler() {
-    }
-
-
-    public void startDocument() throws SAXException {}
+    public WeatherXMLHandler() {}
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equalsIgnoreCase("MEASUREMENT")) {

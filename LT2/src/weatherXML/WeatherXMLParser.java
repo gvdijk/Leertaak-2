@@ -10,21 +10,28 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class WeatherXMLParser extends DefaultHandler {
 
-    private ArrayList<WeatherMeasurement> list;
+    private ArrayList<WeatherMeasurement> list = new ArrayList<>();
+    private WeatherXMLErrorHandler errHandler = new WeatherXMLErrorHandler();
     private ByteArrayInputStream data;
     private WeatherMeasurement temp;
     private String current;
-    private WeatherXMLErrorHandler errHandler;
+    private HashMap<Integer, WeatherCorrection> cor;
 
     public WeatherXMLParser(ByteArrayInputStream data) {
         this.data = data;
-        list = new ArrayList<>();
-        errHandler = new WeatherXMLErrorHandler();
         parseData();
-        //printData();
+    }
+
+    public WeatherXMLParser(ByteArrayInputStream data, HashMap<Integer, WeatherCorrection> cor) {
+        this.data = data;
+        this.cor = cor;
+        parseData();
     }
 
     public void parseData() {
@@ -68,7 +75,22 @@ public class WeatherXMLParser extends DefaultHandler {
                     break;
                 case "TEMP":
                     flag = 4;
-                    temp.setTemperature(Float.parseFloat(current));
+                    if (cor != null) {
+                        float fnew = Float.parseFloat(current);
+                        float fold = cor.get(temp.getStation()).getTemperature();
+                        float diff = fnew - fold;
+                        if (diff > 3) {
+                            System.out.println("Temperature too high. Value is " + fnew + " while average is " + fold);
+                            temp.setTemperature(fold + 3);
+                        } else if (diff < -3) {
+                            System.out.println("Temperature too low. Value is " + fnew + " while average is " + fold);
+                            temp.setTemperature(fold - 3);
+                        } else {
+                            temp.setTemperature(fnew);
+                        }
+                    } else {
+                        temp.setTemperature(Float.parseFloat(current));
+                    }
                     break;
                 case "DEWP":
                     flag = 5;
@@ -115,7 +137,11 @@ public class WeatherXMLParser extends DefaultHandler {
             }
         }
         catch (NumberFormatException nfe) {
-            temp = errHandler.handleEmptyString(nfe, flag, temp);
+            if (cor != null) {
+                temp = errHandler.handleEmptyString(nfe, flag, temp, cor.get(temp.getStation()));
+            } else {
+                temp = errHandler.handleEmptyString(nfe, flag, temp, new WeatherCorrection());
+            }
         }
     }
 
@@ -123,7 +149,21 @@ public class WeatherXMLParser extends DefaultHandler {
         current = new String(ch, start, length);
     }
 
+    class SortByStation implements Comparator<WeatherMeasurement> {
+        public int compare(WeatherMeasurement a, WeatherMeasurement b) {
+            return a.getStation() - b.getStation();
+        }
+    }
+
     public ArrayList<WeatherMeasurement> getData() {
+        Collections.sort(list, new SortByStation());
         return list;
+    }
+
+    public HashMap<Integer, WeatherCorrection> getCorrection() {
+        for (WeatherMeasurement wm : list) {
+            cor.get(wm.getStation()).addMeasurement(wm);
+        }
+        return cor;
     }
 }

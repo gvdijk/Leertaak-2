@@ -1,26 +1,23 @@
-package weatherSQL;
+package weatherIO;
 
 import weatherXML.WeatherMeasurement;
 
 import java.util.ArrayList;
 
-public class WeatherSQLParser {
+public class WeatherIOParser {
 
-    private StringBuilder query;
+    private StringBuilder query = new StringBuilder();
 
-    public WeatherSQLParser() {
-        query  = new StringBuilder("INSERT INTO `Measurement` (`Station_stn`, `date`, `time`, `temp`, `dew`, `stp`, `slp`, `vis`, `wdsp`, `prcp`, `sndp`, `cldc`, `wnddir`, `frz`, `rain`, `snow`, `hail`, `tndr`, `torn`) VALUES ");
-    }
+    public WeatherIOParser() {}
 
     public void parseChuck(ArrayList<WeatherMeasurement> data) {
         for (int x=0; x<10; x++) {
-            query.append("(");
             query.append(data.get(x).getStation());
-            query.append(",'");
+            query.append(",");
             query.append(data.get(x).getDate());
-            query.append("','");
+            query.append(",");
             query.append(data.get(x).getTime());
-            query.append("',");
+            query.append(",");
             query.append(data.get(x).getTemperature());
             query.append(",");
             query.append(data.get(x).getDew());
@@ -52,12 +49,13 @@ public class WeatherSQLParser {
             query.append(data.get(x).isThunder());
             query.append(",");
             query.append(data.get(x).isTornado());
-            query.append("),");
+            query.append("\n");
+            // In case of compatibility issues
+            // query.append(System.getProperty("line.separator"));
         }
     }
 
     public String getQuery() {
-        query.replace(query.length() - 1, query.length(), ";");
         return query.toString();
     }
 }
